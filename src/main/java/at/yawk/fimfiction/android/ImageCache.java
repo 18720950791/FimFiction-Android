@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import java.io.*;
 import java.net.URL;
+import java.util.*;
 import lombok.extern.log4j.Log4j;
 
 /**
@@ -35,13 +36,38 @@ public class ImageCache {
         return null;
     }
 
+    /** Stable extension used when the URL does not carry a recognizable image extension. */
+    static final String DEFAULT_EXTENSION = ".img";
+
+    private static final Set<String> IMAGE_EXTENSIONS = new HashSet<String>(Arrays.asList(
+            "png", "jpg", "jpeg", "gif", "bmp", "webp"));
+
     public File file(URL url) {
-        String file = url.getFile();
-        if (file.indexOf('?') != -1) {
-            file = file.substring(0, file.indexOf('?'));
+        String name = padLeftZeros(Integer.toHexString(url.hashCode()).toUpperCase()) + extension(url);
+        return new File(dir, name);
+    }
+
+    /**
+     * Derives a safe file extension (including the leading dot) for the cache file of the given URL.
+     * <p>
+     * The extension is taken only from the last path segment and is accepted only if it is a known
+     * image extension; otherwise a stable {@link #DEFAULT_EXTENSION default} is returned. The result
+     * never contains path separators or {@code ..}, so the resulting cache file is always a direct
+     * child of the cache directory and the URL path can never traverse out of it.
+     */
+    static String extension(URL url) {
+        String path = url.getPath();
+        if (path == null) { return DEFAULT_EXTENSION; }
+        int slash = path.lastIndexOf('/');
+        String lastSegment = slash == -1 ? path : path.substring(slash + 1);
+        int dot = lastSegment.lastIndexOf('.');
+        if (dot != -1 && dot < lastSegment.length() - 1) {
+            String candidate = lastSegment.substring(dot + 1).toLowerCase(Locale.ROOT);
+            if (IMAGE_EXTENSIONS.contains(candidate)) {
+                return "." + candidate;
+            }
         }
-        String ext = file.indexOf('.') != -1 ? file.substring(file.lastIndexOf('.')) : file;
-        return new File(dir, padLeftZeros(Integer.toHexString(url.hashCode()).toUpperCase()) + ext);
+        return DEFAULT_EXTENSION;
     }
 
     public static String padLeftZeros(String i) {

@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mvn -v)",
+      "Read(//c/Users/ouyang/.m2/repository/org/projectlombok/lombok/**)",
+      "Read(//c/Users/ouyang/.m2/repository/junit/junit/4.13.2/**)",
+      "Read(//c/Users/ouyang/.m2/repository/org/hamcrest/hamcrest-core/**)",
+      "Read(//c/Users/ouyang/.m2/repository/org/hamcrest/hamcrest/**)"
+    ]
+  }
+}
