@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls -d ali/repo-*/)",
+      "Bash(find:*)",
+      "Bash(mvn --version)",
+      "Bash(java -version)",
+      "Bash(javac -version)",
+      "Read(//d//**)",
+      "Read(//c//**)",
+      "Bash(find /d -maxdepth 3 -name mvn.cmd)",
+      "Bash(/d/apache-maven-3.6.2/bin/mvn --version 2>&1)",
+      "Bash(/d/apache-maven-3.6.2/bin/mvn compile:*)",
+      "Bash(ANDROID_JAR=/c/Users/ouyang/.m2/repository/com/google/android/android/2.2.1/android-2.2.1.jar)",
+      "Bash(LOMBOK_JAR=/c/Users/ouyang/.m2/repository/org/projectlombok/lombok/1.18.46/lombok-1.18.46.jar)",
+      "Bash(LOG4J_STUB=/tmp/stubs/classes)",
+      "Bash(__NEW_LINE_b3b3c7aca590dd57__ CP=\"$ANDROID_JAR;$LOMBOK_JAR;$LOG4J_STUB\")",
+      "Bash(__NEW_LINE_b3b3c7aca590dd57__ rm:*)"
+    ]
+  }
+}

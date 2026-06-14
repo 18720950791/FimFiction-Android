@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import java.io.*;
 import java.net.URL;
+import java.util.*;
 import lombok.extern.log4j.Log4j;
 
 /**
@@ -14,6 +15,13 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 public class ImageCache {
     private final File dir;
+
+    /** Default extension used when the URL does not carry a recognizable image extension. */
+    static final String DEFAULT_EXTENSION = ".img";
+
+    /** Set of recognized image extensions (without leading dot, all lowercase). */
+    private static final Set<String> IMAGE_EXTENSIONS = new HashSet<String>(Arrays.asList(
+            "png", "jpg", "jpeg", "gif", "bmp", "webp"));
 
     ImageCache(File dir) { this.dir = dir; }
 
@@ -35,13 +43,55 @@ public class ImageCache {
         return null;
     }
 
+    /**
+     * Returns a stable cache file for the given URL, always located directly inside the
+     * configured cache directory. The file name is an 8-character uppercase hex hash
+     * followed by a safe image extension.
+     */
     public File file(URL url) {
-        String file = url.getFile();
-        if (file.indexOf('?') != -1) {
-            file = file.substring(0, file.indexOf('?'));
+        String name = padLeftZeros(Integer.toHexString(url.hashCode()).toUpperCase()) + extension(url);
+        return new File(dir, name);
+    }
+
+    /**
+     * Derives a safe file extension (including the leading dot) for the cache file of the
+     * given URL.
+     *
+     * <p>Only the last path segment is inspected for a dot. The candidate extension is
+     * accepted only when it matches a known image extension; otherwise the stable
+     * {@link #DEFAULT_EXTENSION default} is returned. Query parameters, fragments,
+     * directory dots, and path-traversal sequences never influence the result.</p>
+     */
+    static String extension(URL url) {
+        // getPath() excludes query string and fragment -- only the URL path is considered.
+        String path = url.getPath();
+        if (path == null || path.isEmpty()) {
+            return DEFAULT_EXTENSION;
         }
-        String ext = file.indexOf('.') != -1 ? file.substring(file.lastIndexOf('.')) : file;
-        return new File(dir, padLeftZeros(Integer.toHexString(url.hashCode()).toUpperCase()) + ext);
+
+        // Isolate the last path segment (everything after the final '/').
+        int lastSlash = path.lastIndexOf('/');
+        String lastSegment = (lastSlash == -1) ? path : path.substring(lastSlash + 1);
+
+        // Empty segment (trailing slash or root path) -> default.
+        if (lastSegment.isEmpty()) {
+            return DEFAULT_EXTENSION;
+        }
+
+        // Look for a dot strictly within the last segment.
+        int dot = lastSegment.lastIndexOf('.');
+        if (dot == -1 || dot == lastSegment.length() - 1) {
+            // No dot at all, or dot is the very last character (e.g. "file.") -> default.
+            return DEFAULT_EXTENSION;
+        }
+
+        String candidate = lastSegment.substring(dot + 1).toLowerCase(Locale.ROOT);
+
+        // Only accept recognized image extensions; reject everything else (e.g. .sh, .html).
+        if (IMAGE_EXTENSIONS.contains(candidate)) {
+            return "." + candidate;
+        }
+        return DEFAULT_EXTENSION;
     }
 
     public static String padLeftZeros(String i) {
