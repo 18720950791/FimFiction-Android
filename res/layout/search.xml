@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="6dp">
+
+    <EditText
+            android:id="@+id/query_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/title"
+            android:inputType="textNoSuggestions"/>
+
+    <EditText
+            android:layout_below="@id/query_title"
+            android:id="@+id/query_author"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/author_id"
+            android:inputType="number"/>
+
+    <LinearLayout
+            android:id="@+id/shelf"
+            android:layout_below="@id/query_author"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+        <Button
+                android:text="@string/shelves"
+                android:id="@+id/list_shelves"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"/>
+        <EditText
+                android:id="@+id/query_shelf"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:hint="@string/shelf_id"
+                android:inputType="number"/>
+    </LinearLayout>
+
+    <TextView
+            android:text="@string/unread"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@android:style/TextAppearance.Large"
+            android:layout_alignBaseline="@+id/unread_checkbox"/>
+
+    <CheckBox
+            android:id="@+id/unread_checkbox"
+            android:layout_below="@id/shelf"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <LinearLayout
+            android:layout_below="@id/unread_checkbox"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:id="@+id/content_rating_row">
+
+        <Spinner
+                android:id="@+id/content_rating"
+                android:entries="@array/content_rating"
+                android:layout_width="0dp"
+                android:layout_weight="4"
+                android:layout_height="wrap_content"/>
+
+        <TextView
+                android:text="@string/sex_short"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@android:style/TextAppearance.Large"
+                android:layout_marginLeft="15dp"
+                android:gravity="center"/>
+
+        <CheckBox
+                android:id="@+id/sex"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="7dp"
+                android:layout_height="wrap_content"/>
+
+        <TextView
+                android:text="@string/gore_short"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@android:style/TextAppearance.Large"
+                android:layout_marginLeft="15dp"
+                android:gravity="center"/>
+
+        <CheckBox
+                android:id="@+id/gore"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="7dp"
+                android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <Spinner
+            android:id="@+id/order"
+            android:layout_below="@id/content_rating_row"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/order"/>
+
+    <RelativeLayout
+            android:id="@+id/character_incl_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/order"/>
+
+    <Button
+            android:id="@+id/submit"
+            android:text="@string/search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"/>
+</RelativeLayout>
