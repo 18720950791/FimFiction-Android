@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mvn --version)",
+      "Bash(cd /tmp)",
+      "Bash(curl -sL -o maven.tar.gz \"https://archive.apache.org/dist/maven/maven-3/3.9.6/binaries/apache-maven-3.9.6-bin.tar.gz\")",
+      "Bash(tar xzf:*)",
+      "Read(//c/Users/ouyang/.m2/repository/junit/junit/4.13.2/**)",
+      "Read(//c/Users/ouyang/.m2/repository/org/projectlombok/lombok/1.12.4/**)",
+      "Read(//c/Users/ouyang/.m2/repository/log4j/log4j/1.2.14/**)",
+      "Bash(find /c/Users/ouyang/.m2/repository -name log4j*.jar)",
+      "Bash(find /c/Users/ouyang/.m2/repository -path */slf4j* -name *.jar)",
+      "Bash(curl -sL -o log4j-1.2.17.jar \"https://repo1.maven.org/maven2/log4j/log4j/1.2.17/log4j-1.2.17.jar\")",
+      "Bash(find /c/Users/ouyang/.m2/repository/org/hamcrest -name *.jar)",
+      "Bash(find /c/Users/ouyang/.m2/repository -path */hamcrest* -name *.jar)",
+      "Bash(jar tf:*)",
+      "Bash(javap:*)",
+      "Read(//tmp/**)",
+      "Bash(cygpath -w /tmp/log4j-1.2.17.jar)"
+    ]
+  }
+}
